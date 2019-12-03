@@ -1,0 +1,12 @@
+{
+    "system":"公文系统",
+    "uname":"zhangsan",
+    "logdate":"2019-11-28 19:53",
+    "ip_server":"10.56.113.70",
+    "ip_local":[
+      "Caption:[ 00000001 ] Microsoft Hyper-V Network Adapter IP:10.56.113.70 Net MASK:255.255.255.192 Default gateway:10.56.113.83 MAC:00:15:5D:C8:16:30",
+      "Caption:[ 00000012 ] Hyper-V Virtual Ethernet Adapter IP:192.168.175.241 Net MASK:255.255.255.240 Default gateway:undefined MAC:02:15:51:61:72:95",
+      "Caption:[ 00000016 ] Hyper-V Virtual Ethernet Adapter IP:172.23.112.1 Net MASK:255.255.240.0 Default gateway:undefined MAC:00:15:5D:9E:D5:B4"
+    ]
+  }
+  
