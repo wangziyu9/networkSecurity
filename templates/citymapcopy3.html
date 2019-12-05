@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script src="../static/js/jquery.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript"
+        src="https://api.map.baidu.com/api?v=2.0&ak=3YSRoi5VMpcFlxKQwK0C5v41GGs5eDCG"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '热力图与百度地图扩展';
+
+        $.post("/data/city/{[ cityname ]}", function (data, status) {
+            console.log(data);
+
+            var aqi_data = data.aqi;
+            var geoCoordMap = data.coord;
+            var convertData = function (aqi_data) {
+                var res = [];
+                for (var i = 0; i < aqi_data.length; i++) {
+                    var geoCoord = geoCoordMap[aqi_data[i].name];
+                    if (geoCoord) {
+                        res.push({
+                            name: aqi_data[i].name,
+                            value: geoCoord.concat(aqi_data[i].value)
+                        });
+                    }
+                }
+                return res;
+            };
+
+            myChart.setOption(option = {
+                animation: false,
+                bmap: {
+                    // center: [120.13066322374, 30.240018034923], //杭州
+                    center: data.center.coord,
+                    zoom: 12,
+                    roam: true, mapStyle: {  // 百度地图自定义样式
+                        styleJson: [
+                            // 陆地
+                            {
+                                "featureType": "land",
+                                "elementType": "all",
+                                "stylers": {
+                                    "color": "#0c1c30"
+                                }
+                            },
+                            // 水系
+                            {
+                                "featureType": "water",
+                                "elementType": "all",
+                                "stylers": {
+                                    "color": "#073763",
+                                    "lightness": -54
+                                }
+                            },
+                           
+                            {
+                                "featureType": "road",
+                                "elementType": "all",
+                                "stylers": {
+                                    "color": "#323c48"
+                                }
+                            },
+                             // 国道与高速
+                             {
+                                "featureType": "highway",
+                                "elementType": "all",
+                                "stylers": {
+                                    "color": "#45818e"
+                                }
+                            },
+                            // 边界线
+                            {
+                                "featureType": "boundary",
+                                "elementType": "all",
+                                "stylers": {
+                                    "color": "#ffffff",
+                                    "lightness": -62,
+                                    "visibility": "on"
+                                }
+                            },
+                            // 行政标注
+                            {
+                                "featureType": "label",
+                                "elementType": "labels.text.fill",
+                                "stylers": {
+                                    "color": "#ffffff",
+                                    "visibility": "on"
+                                }
+                            },
+                            {
+                                "featureType": "label",
+                                "elementType": "labels.text.stroke",
+                                "stylers": {
+                                    "color": "#444444",
+                                    "visibility": "on"
+                                }
+                            }
+                        ]
+                    }
+                },
+
+                visualMap: {
+                    show: false,
+                    min: 0,
+                    max: 200,
+                    left: 'left',
+                    top: 'bottom',
+                    text: ['高', '低'],
+                    calculable: true,
+                    seriesIndex: [1],
+                    inRange: {
+                        color: ['#50a3ba', '#eac736', 'red'],
+                        // opacity: 70
+                    },
+                },
+
+                series: [
+                    {
+                    name: '点',
+                    type: 'scatter',
+                    coordinateSystem: 'bmap',
+                    symbol: 'pin',
+                    symbolSize: 50,
+                    label: {
+                        show: true,
+                        formatter: params => params.value[2],
+                        color: '#fff',
+                        fontSize: 14,
+                    },
+                    itemStyle: {
+                        borderWidth: 1,
+                        color:"gray",
+                        opacity:0.7
+                    },
+                    zlevel: 6,
+                    data: convertData(aqi_data),
+                },
+                {
+                    name: 'pm2.5',
+                    type: 'effectScatter',
+                    coordinateSystem: 'bmap',
+                    symbolSize: 24,
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        // brushType: 'stroke',
+                        period: 15,
+                        opacity: 70,
+                        scale: 5
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        formatter: '{b}',
+                        position: 'bottom',
+                        color: '#fff',
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        fontFamily: 'Courier New',
+                        show: true,
+                    },
+                    itemStyle: {
+                        emphasis: {
+                            borderColor: '#fff',
+                            borderWidth: 1
+                        },
+                        opacity:1
+                    },
+                    data: convertData(aqi_data),
+                    zlevel: 1,
+                }
+                ]
+            });
+        });
+    </script>
+</body>
+
+</html>

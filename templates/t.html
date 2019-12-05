@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bmap.min.js"></script>
+    <script src="http://webapi.amap.com/maps?v=1.4.10&key=35a871e5905ecfd749bd998448b9cd03&plugin=AMap.DistrictSearch&plugin=AMap.Geolocation"></script>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript"
+        src="https://api.map.baidu.com/api?v=2.0&ak=3YSRoi5VMpcFlxKQwK0C5v41GGs5eDCG"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '热力图与百度地图扩展';
+
+        $.post("/data/city/郑州", function (data, status) {
+            option = {
+                title: {
+                    text: '位置获取中。。。。。',
+                    left: 'center',
+                    top: '0',
+                    textStyle: {
+                        color: 'rgba(18,89,147,1)',
+                        fontSize: 21
+                    },
+                    backgroundColor: 'rgba(255,255,255,0.8)'
+                },
+                bmap: {
+                    roam: true,
+                    mapStyle: {
+                        style: "grayscale"
+                    }
+                },
+                series: [{
+                    coordinateSystem: 'bmap',
+                    type: 'effectScatter',
+                    symbol: 'arrow',
+                    itemStyle: {
+                        normal: {
+                            color: 'rgba(18,89,147,1)'
+                        }
+                    },
+                    data: []
+                }]
+            };
+            setTimeout(function () {
+                var map = myChart.getModel().getComponent('bmap').getBMap();
+                map.addControl(new BMap.NavigationControl({})); // 添加平移缩放控件
+                map.addControl(new BMap.ScaleControl({})); // 添加比例尺控件
+                map.enableScrollWheelZoom(); //启用滚轮放大缩小
+                map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+                new AMap.Geolocation().getCurrentPosition(function (status, r) {
+                    var address = r.addressComponent;
+                    if (!address.city) {
+                        address.city = address.province.replace('市', '城区');
+                    }
+                    addBoundary(address.province, address.city, address.district);
+
+                    function addBoundary(province, city, district) {
+                        new AMap.DistrictSearch({
+                            level: 'province',
+                            subdistrict: 1, //返回下一级行政区
+                            showbiz: false, //最后一级返回街道信息
+                            extensions: 'base'
+                        }).search('中国', function (status, result) {
+                            if (status == 'complete') {
+                                result.districtList[0].districtList.forEach(function (item) {
+                                    if (item.name != province) {
+                                        draw(item.name);
+                                    } else
+                                        if (city) {
+                                            new AMap.DistrictSearch({
+                                                level: 'city',
+                                                subdistrict: 1, //返回下一级行政区
+                                                showbiz: false, //最后一级返回街道信息
+                                                extensions: 'base'
+                                            }).search(item.name, function (status, result) {
+                                                if (status == 'complete') {
+                                                    result.districtList[0].districtList.forEach(function (item) {
+
+                                                        if (item.name != city) {
+                                                            draw(item.name);
+                                                        } else if (district) {
+
+                                                            new AMap.DistrictSearch({
+                                                                level: 'district',
+                                                                subdistrict: 1, //返回下一级行政区
+                                                                showbiz: false, //最后一级返回街道信息
+                                                                extensions: 'base'
+                                                            }).search(item.name, function (status, result) {
+                                                                if (status == 'complete') {
+                                                                    result.districtList[0].districtList.forEach(function (item) {
+                                                                        if (item.name != district) {
+                                                                            draw(item.name);
+                                                                        }
+
+                                                                    });
+                                                                }
+                                                            });
+
+                                                        }
+
+                                                    });
+                                                }
+                                            });
+                                        }
+
+
+
+                                });
+                            }
+
+                            function draw(address) {
+
+                                new BMap.Boundary().get(address, function (rs) { //获取行政区域
+                                    rs.boundaries.forEach(function (item) {
+                                        map.addOverlay(new BMap.Polygon(item, {
+                                            // strokeWeight: 2,
+                                            // strokeColor: "#ff0000",                   
+                                            // fillOpacity: 0.0, 
+                                            strokeColor: 'white',
+                                            fillColor: 'black',
+                                            strokeWeight: 1,
+                                            strokeOpacity: 0,
+                                            fillOpacity: .521,
+                                            strokeStyle: 'dashed'
+                                        }));
+                                    });
+                                });
+
+                            }
+                        });
+                    }
+                    map.centerAndZoom(address.city);
+                    setTimeout(function () {
+                        myChart.setOption({
+                            title: {
+                                text: '当前位置：' + r.formattedAddress,
+                            },
+                            tooltip: {
+                                show: true,
+                                backgroundColor: option.title.backgroundColor,
+                                formatter: function (params) {
+                                    var infoWindow = new BMap.InfoWindow();
+                                    infoWindow.setWidth(0);
+                                    infoWindow.setHeight(0);
+                                    infoWindow.setTitle(r.formattedAddress);
+                                    infoWindow.setContent('<ul style="color:' + option.title.textStyle.color + ';"><li>省市区：' + address.province + '</li>' +
+                                        '<li>地级市：' + address.city + '</li>' +
+                                        '<li>区 县：' + address.district + '</li>' +
+                                        '<li>街 道：' + (address.street ? address.street : '未知') + '</li>' +
+                                        '<li>经 度：' + r.position.lng + '</li>' +
+                                        '<li>纬 度：' + r.position.lat + '</li></ul>');
+                                    map.openInfoWindow(infoWindow, new BMap.Point(r.position.lng, r.position.lat));
+                                }
+                            },
+                            series: [{
+                                data: [{
+                                    name: address,
+                                    value: [r.position.lng, r.position.lat]
+                                }]
+                            }]
+                        });
+                        setTimeout(function () {
+                            //map.centerAndZoom(new BMap.Point(r.position.lng, r.position.lat), 16);
+                            myChart.dispatchAction({
+                                type: 'showTip',
+                                seriesIndex: 0,
+                                dataIndex: 0
+                            })
+                        }, 100);
+
+                    }, 100);
+
+                });
+
+
+
+            }, 2000);
+            myChart.setOption(option);
+            //===================================================================================================
+
+            //     myChart.setOption(option = {
+            //     animation: false,
+            //     bmap: {
+            //         // center: [120.13066322374, 30.240018034923], //杭州
+            //         center: data.center.coord,
+            //         zoom: 12,
+            //         roam: true, mapStyle: {  // 百度地图自定义样式
+            //             styleJson: [
+            //                 // 陆地
+            //                 {
+            //                     "featureType": "land",
+            //                     "elementType": "all",
+            //                     "stylers": {
+            //                         "color": "#0c1c30"
+            //                     }
+            //                 },
+            //                 // 水系
+            //                 {
+            //                     "featureType": "water",
+            //                     "elementType": "all",
+            //                     "stylers": {
+            //                         "color": "#073763",
+            //                         "lightness": -54
+            //                     }
+            //                 },
+
+            //                 {
+            //                     "featureType": "road",
+            //                     "elementType": "all",
+            //                     "stylers": {
+            //                         "color": "#323c48"
+            //                     }
+            //                 },
+            //                 // 国道与高速
+            //                 {
+            //                     "featureType": "highway",
+            //                     "elementType": "all",
+            //                     "stylers": {
+            //                         "color": "#45818e"
+            //                     }
+            //                 },
+            //                 // 边界线
+            //                 {
+            //                     "featureType": "boundary",
+            //                     "elementType": "all",
+            //                     "stylers": {
+            //                         "color": "#ffffff",
+            //                         "lightness": -62,
+            //                         "visibility": "on"
+            //                     }
+            //                 },
+            //                 // 行政标注
+            //                 {
+            //                     "featureType": "label",
+            //                     "elementType": "labels.text.fill",
+            //                     "stylers": {
+            //                         "color": "#ffffff",
+            //                         "visibility": "on"
+            //                     }
+            //                 },
+            //                 {
+            //                     "featureType": "label",
+            //                     "elementType": "labels.text.stroke",
+            //                     "stylers": {
+            //                         "color": "#444444",
+            //                         "visibility": "on"
+            //                     }
+            //                 }
+            //             ]
+            //         }
+            //     },
+
+            //     visualMap: {
+            //         show: false,
+            //         min: 0,
+            //         max: 200,
+            //         left: 'left',
+            //         top: 'bottom',
+            //         text: ['高', '低'],
+            //         calculable: true,
+            //         seriesIndex: [1],
+            //         inRange: {
+            //             color: ['#50a3ba', '#eac736', 'red'],
+            //             // opacity: 70
+            //         },
+            //     },
+
+            //     series: [
+            //         {
+            //             name: '点',
+            //             type: 'scatter',
+            //             coordinateSystem: 'bmap',
+            //             symbol: 'pin',
+            //             symbolSize: 50,
+            //             label: {
+            //                 show: true,
+            //                 formatter: params => params.value[2],
+            //                 color: '#fff',
+            //                 fontSize: 14,
+            //             },
+            //             itemStyle: {
+            //                 borderWidth: 1,
+            //                 color: "gray",
+            //                 opacity: 0.7
+            //             },
+            //             zlevel: 6,
+            //             data: convertData(aqi_data),
+            //         },
+            //         {
+            //             name: 'pm2.5',
+            //             type: 'effectScatter',
+            //             coordinateSystem: 'bmap',
+            //             symbolSize: 24,
+            //             showEffectOn: 'render',
+            //             rippleEffect: {
+            //                 // brushType: 'stroke',
+            //                 period: 15,
+            //                 opacity: 70,
+            //                 scale: 5
+            //             },
+            //             hoverAnimation: true,
+            //             label: {
+            //                 formatter: '{b}',
+            //                 position: 'bottom',
+            //                 color: '#fff',
+            //                 fontSize: 16,
+            //                 fontWeight: 'bold',
+            //                 fontFamily: 'Courier New',
+            //                 show: true,
+            //             },
+            //             itemStyle: {
+            //                 emphasis: {
+            //                     borderColor: '#fff',
+            //                     borderWidth: 1
+            //                 },
+            //                 opacity: 1
+            //             },
+            //             data: convertData(aqi_data),
+            //             zlevel: 1,
+            //         }
+            //     ]
+            // });
+        });
+    </script>
+</body>
+
+</html>
