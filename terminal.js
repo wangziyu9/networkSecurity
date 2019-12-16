@@ -63,7 +63,7 @@ db.temp1.aggregate([
 
 // 去重
 db.temp1.aggregate([
-    {$group: {_id: {name:"$uname",ip_local:"$ip_local"},
+    {group: {_id: {name:"$uname"},
         uname: {$push: "$uname"},
         system: {$push: "$system"},
         logdate: {$push: "$logdate"},
@@ -71,6 +71,65 @@ db.temp1.aggregate([
         ip_local: {$push: "$ip_local"},
         sizeOfip_local: {$sum: "$sizeOfip_local"}
         },
-        {$unwind:"$ip_local"}
-    }
+    },
+    {$unwind:"$ip_local"},
+    {$unwind:"$ip_local"},
+    {$group: {_id: {name:"$uname"},
+        uname: {$push: "$uname"},
+        system: {$push: "$system"},
+        logdate: {$push: "$logdate"},
+        ip_server: {$push: "$ip_server"},
+        ip_local: {$addToSet: "$ip_local"},
+        sizeOfip_local: {$sum: "$sizeOfip_local"}
+        },
+    },
 ])
+
+var group = {
+    "$group":
+    {
+        _id: { name: "$uname" },
+        uname: { $push: "$uname" },
+        ip_local: { $push: "$ip_local" },
+        sizeOfip_local: { $push: "$sizeOfip_local" }
+    },
+};
+var project = {
+    "$project":
+    {
+        "ip_local":
+        {
+            "$cond": [{
+                "$eq":
+                    ["$ip_local", [[]]]
+            }, [[null]], "$ip_local"]
+        }
+    }
+};
+
+db.temp1.aggregate(group, project)
+
+
+// 去重
+db.temp1.aggregate([
+    {$group: {
+        _id: {name:"$uname",ip_local:"$ip_local"},
+        uname: {$push: "$uname"},
+        system: {$push: "$system"},
+        logdate: {$push: "$logdate"},
+        ip_server: {$push: "$ip_server"},
+        ip_local: {$push: "$ip_local"},
+        },
+    },
+    {$unwind:"$ip_local"},
+    {$unwind:"$ip_local"},
+    {$group: {_id: "$_id",
+        uname: {$first: "$uname"},
+        system: {$first: "$system"},
+        logdate: {$first: "$logdate"},
+        ip_server: {$first: "$ip_server"},
+        ip_local: {$addToSet: "$ip_local"},
+        },
+    },
+],{ allowDiskUse: true } )
+

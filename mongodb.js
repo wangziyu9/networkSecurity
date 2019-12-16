@@ -44,7 +44,7 @@ db.temp.aggregate([
         }    
     }
 ]).forEach(function(x){
-    db.temp1.insert(
+    db.target.insert(
           {
             uname:x.uname[0],
             system:x.system[0],
