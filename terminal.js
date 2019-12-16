@@ -39,7 +39,7 @@ db.terminal.aggregate([
 
 // 去重
 db.temp1.aggregate([
-    {$group: {_id: "$uname",
+    {$group: {_id: {name:"$uname",ip_local:"$ip_local"},
         uname: {$push: "$uname"},
         system: {$push: "$system"},
         logdate: {$push: "$logdate"},
@@ -60,3 +60,17 @@ db.temp1.aggregate([
           }
     );
 });
+
+// 去重
+db.temp1.aggregate([
+    {$group: {_id: {name:"$uname",ip_local:"$ip_local"},
+        uname: {$push: "$uname"},
+        system: {$push: "$system"},
+        logdate: {$push: "$logdate"},
+        ip_server: {$push: "$ip_server"},
+        ip_local: {$push: "$ip_local"},
+        sizeOfip_local: {$sum: "$sizeOfip_local"}
+        },
+        {$unwind:"$ip_local"}
+    }
+])
