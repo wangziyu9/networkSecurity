@@ -15,8 +15,10 @@ l = []
 ip = re.compile(r"IP:((\d+.){3}(\d+))")
 netcard = re.compile(r"] (.+) IP:")
 
-result_target = db.target.find({"sizeOfip_local":{'$gte':10}})
-# 遍历多 ip 终端，用正则表达式为终端网卡类型打标
+# result_target = db.target.find({"uname":"liyong130"})
+result_target = db.target.find({"sizeOfip_local":{'$gte':2}})#.limit(50)
+
+# 遍历多 ip 终端，为终端网卡类型打标
 for doc in result_target:
     adapter_ip = copy.deepcopy(model.adapter_type)
     ip_list = []
@@ -47,7 +49,7 @@ for doc in result_target:
     l.append(doc)
     # print(adapter_ip)
 
-with open(r"/home/yur/code/networkSecurity/db/报表1.csv", "a", encoding="utf8") as sf:
+with open(r"/home/yur/code/networkSecurity/db/报表1226.csv", "a", encoding="utf8") as sf:
     # 写入 csv 首行
     s = ", "
     titlelist = [
@@ -68,8 +70,8 @@ with open(r"/home/yur/code/networkSecurity/db/报表1.csv", "a", encoding="utf8"
     for a in l:
         print(a["adapter_ip"])
 
-        if(a["ip_count"] < 2):
-            continue
+        # if(a["ip_count"] < 2):
+        #     continue
 
         ipl = []
         for key in a["adapter_ip"]:
