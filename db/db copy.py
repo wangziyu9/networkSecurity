@@ -5,6 +5,7 @@ import pymongo
 import re
 import copy
 import judge
+from pandas import read_csv;
 
 client = pymongo.MongoClient(host='localhost', port=27017)
 db = client.TERMINAL
@@ -16,7 +17,8 @@ ip = re.compile(r"IP:((\d+.){3}(\d+))")
 netcard = re.compile(r"] (.+) IP:")
 
 # result_target = db.target.find({"uname":"liyong130"})
-result_target = db.target.find({"sizeOfip_local":{'$gte':2}})#.limit(50)
+result_target = db.target.find()#({"sizeOfip_local":{'$gte':2}}) #.limit(50)
+# 未采集到 iplocal
 
 # 遍历多 ip 终端，为终端网卡类型打标
 for doc in result_target:
@@ -24,7 +26,7 @@ for doc in result_target:
     ip_list = []
     # print(doc)
     for adapter in doc["ip_local"]:
-        # print(adapter)
+        # 通过网卡名称和 ip，判断网卡类型和对应的 ip
         if ip.search(adapter):
             device_ip = ip.search(adapter).group(1)
             if(device_ip == "0.0.0.0"):
@@ -35,9 +37,11 @@ for doc in result_target:
             adaptertype = model.march_device(adaptermodel)
             adapter_ip[adaptertype].append(device_ip)
 
-    doc["ip_count"] = len(set(ip_list))
-    # print(adapter_ip)
     doc["adapter_ip"] = adapter_ip
+
+    # 所有 Iplocal 中不重复的 Ip 数量
+    doc["ip_count"] = len(set(ip_list))
+    
     # 查询用户表，匹配终端使用者信息
     user_info = db.users.find({"uname":doc["uname"]})
     
@@ -49,7 +53,8 @@ for doc in result_target:
     l.append(doc)
     # print(adapter_ip)
 
-with open(r"/home/yur/code/networkSecurity/db/报表1226.csv", "a", encoding="utf8") as sf:
+file_name = r"/home/yur/code/networkSecurity/db/报表12271.csv"
+with open(file_name, "a", encoding="utf8") as sf:
     # 写入 csv 首行
     s = ", "
     titlelist = [
@@ -69,21 +74,15 @@ with open(r"/home/yur/code/networkSecurity/db/报表1226.csv", "a", encoding="ut
     # 将字典逐个写入 csv
     for a in l:
         print(a["adapter_ip"])
-
-        # if(a["ip_count"] < 2):
-        #     continue
-
         ipl = []
         for key in a["adapter_ip"]:
             ips = "+".join(a["adapter_ip"][key])
             if ips:
                 ipl.append(key + ":" + ips)
         adapter_ips = " ".join(ipl)
-        print(adapter_ips)
-
+        # print(adapter_ips)
+        # 调用判断是否违规
         judgestr = judge.judge(a["adapter_ip"])
-        # if("133." in adapter_ips) and ("10." in adapter_ips):
-        #     judgestr += ("疑似双网卡 ")
 
         linelist = [
             a["uname"],
@@ -96,7 +95,11 @@ with open(r"/home/yur/code/networkSecurity/db/报表1226.csv", "a", encoding="ut
             adapter_ips,
             judgestr
         ]
-        
 
         linestr = s.join(linelist)
+        
         sf.write(linestr + "\n")
+
+df = read_csv(file_name)
+newDF = df.drop_duplicates()
+newDF.to_csv(file_name)

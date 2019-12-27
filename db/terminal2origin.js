@@ -1,3 +1,4 @@
+// 获取 ip_local 数量
 db.origin.aggregate([      
     {"$match":{"ip_local": {$exists:true}}},   
     {"$project": {

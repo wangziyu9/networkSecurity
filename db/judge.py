@@ -2,11 +2,13 @@ import json
 import re
 
 
-oss = re.compile(r"256.")
-mss = re.compile(r"10.5[6|7]")
-bss = re.compile(r"133.")
-personal = re.compile(r"(\d+.){3}(\d+)")
-vpn = re.compile(r"10.((0)|(25[1,3])|(56)).")
+oss = re.compile(r"^256.")
+mss = re.compile(r"^10.5[6|7]")
+bss = re.compile(r"^133.")
+personal = re.compile(r"^(\d+.){3}(\d+)")
+
+vpn = re.compile(r"^(10.((0)|(25[1,3])|(56)).)|(133.160.)")
+# 10.0 10.56 10.251/3 133.160
 
 
 def judge(d):
@@ -68,5 +70,5 @@ def judge(d):
 
     return(judge)
 
-# d = {'Ethernet': [], 'Others': [], 'Wireless+External': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': ['10.251.1.84'], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': ['192.168.0.102'], 'Wireless+Onboard': []}
+# d = {'Ethernet': [], 'Others': [], 'Wireless+External': [], 'unknownVPN': ['133.160.1.1'], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': ['10.251.1.84'], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': ['192.168.0.102'], 'Wireless+Onboard': []}
 # print(judge(d))

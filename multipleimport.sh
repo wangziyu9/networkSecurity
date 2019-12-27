@@ -24,3 +24,8 @@ do
 	mongoimport -d TERMINAL -c origin $col;
 	rm $col;
 done
+
+# 模块化
+# 分地市，类型占比，vpn b/m ……
+# 网页：分类，分地市
+# 未采集到的情况
