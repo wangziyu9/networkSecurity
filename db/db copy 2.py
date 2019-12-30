@@ -12,12 +12,32 @@ db = client.TERMINAL
 collection_terminal = db.terminal
 collection_users = db.users
 
+file_name = r"/home/yur/code/networkSecurity/db/报表12292.csv"
+with open(file_name, "a", encoding="utf8") as sf:
+    # 写入 csv 首行
+    s = ", "
+    titlelist = [
+        "uname", 
+        "city", 
+        "name", 
+        "department",
+        "system",
+        "ip_server", 
+        "ip_count", 
+        "adapter_ip",
+        "judge"
+    ]
+    titlestr = s.join(titlelist)
+    sf.write(titlestr + "\n")
+
 l = []
 ip = re.compile(r"IP:((\d+.){3}(\d+))")
 netcard = re.compile(r"] (.+) IP:")
 
-# result_target = db.target.find({"uname":"18021289319"},no_cursor_timeout=True)
-result_target = db.target.find({"sizeOfip_local":{'$gte':2}}) ##.limit(50)#
+# result_target = db.target.find({"uname":"15639107968"},no_cursor_timeout=True)
+# result_target = db.target.find({"uname":{'$regex':}).skip(29000) ##.limit(50)#
+# result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
+result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
 # 未采集到 iplocal
 
 # 遍历多 ip 终端，为终端网卡类型打标
@@ -50,57 +70,39 @@ for doc in result_target:
     except:
         doc["user_info"] = {'_id': 'USER NOT FOUND', 'uname': 'USER NOT FOUND', 'name': 'USER NOT FOUND', 'mail': 'USER NOT FOUND', 'department': 'USER NOT FOUND', 'city': 'USER NOT FOUND'}
     user_info.close()
-    l.append(doc)
+    # l.append(doc)
     # print(adapter_ip)
 
-result_target.close()
-file_name = r"/home/yur/code/networkSecurity/db/报表1229.csv"
-with open(file_name, "a", encoding="utf8") as sf:
-    # 写入 csv 首行
-    s = ", "
-    titlelist = [
-        "uname", 
-        "city", 
-        "name", 
-        "department",
-        "system",
-        "ip_server", 
-        "ip_count", 
-        "adapter_ip",
-        "judge"
-    ]
-    titlestr = s.join(titlelist)
-    sf.write(titlestr + "\n")
-
     # 将字典逐个写入 csv
-    for a in l:
-        print(a["adapter_ip"])
-        ipl = []
-        for key in a["adapter_ip"]:
-            ips = "+".join(a["adapter_ip"][key])
-            if ips:
-                ipl.append(key + ":" + ips)
-        adapter_ips = " ".join(ipl)
-        # print(adapter_ips)
-        # 调用判断是否违规
-        judgestr = judge.judge(a["adapter_ip"])
+    # print(doc["uname"])
+    # print(doc["adapter_ip"])
+    ipl = []
+    for key in doc["adapter_ip"]:
+        ips = "+".join(doc["adapter_ip"][key])
+        if ips:
+            ipl.append(key + ":" + ips)
+    adapter_ips = " ".join(ipl)
+    # print(adapter_ips)
+    # 调用判断是否违规
+    judgestr = judge.judge(doc["adapter_ip"])
 
-        linelist = [
-            a["uname"],
-            a["user_info"]["city"],
-            a["user_info"]["name"],
-            a["user_info"]["department"],
-            a["system"],
-            a["ip_server"],
-            str(a["ip_count"]),
-            adapter_ips,
-            judgestr
-        ]
+    linelist = [
+        doc["uname"],
+        doc["user_info"]["city"],
+        doc["user_info"]["name"],
+        doc["user_info"]["department"],
+        doc["system"],
+        doc["ip_server"],
+        str(doc["ip_count"]),
+        adapter_ips,
+        judgestr
+    ]
 
-        linestr = s.join(linelist)
-        
+    linestr = s.join(linelist)
+    with open(file_name, "a", encoding="utf8") as sf:
         sf.write(linestr + "\n")
 
+result_target.close()
 df = read_csv(file_name)
 newDF = df.drop_duplicates()
 newDF.to_csv(file_name)

@@ -358,7 +358,10 @@ d = {"Intel(R) Ethernet Connection I217-LM Network Adapter":"Ethernet+Onboard",
 }
 
 def march_device(s):
-    return(d[s])
+    try:
+        return(d[s])
+    except:
+        return("unknown adapter")
 
 # tt = {'Ethernet': ['10.57.116.201'], 'Others': [], 'Wireless+External': ['172.30.235.1'], 'VirtualAdapter': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'VirtualAdapter': [], 'Wireless': [], 'VPN': [], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': ['133.163.20.101', '10.57.116.201'], 'Wireless+Onboard': []}
 # ipl = []
