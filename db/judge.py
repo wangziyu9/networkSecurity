@@ -1,7 +1,8 @@
 import json
 import re
 
-
+henan_vpn = re.compile(r"10.59.253.22(8|9)")
+national_vpn = re.compile(r"^10.253")
 oss = re.compile(r"^256.")
 mss = re.compile(r"^10.5[6|7]")
 bss = re.compile(r"^133.")
@@ -23,7 +24,7 @@ def judge(d):
         "个人网":0
     }
     for key, value in d.items():
-        if key == "VPN" or key == "unknownVPN" :
+        if key == "VPN" or key == "unknownVPN" or key == "VirtualAdapter":
             continue
         for ip in d[key]:
             if(oss.search(ip)):
@@ -54,16 +55,24 @@ def judge(d):
     if d["unknownVPN"]:
         # judge += d["VPN"] 
         for ip in d["unknownVPN"]:
-            if not vpn.search(ip):
+            if henan_vpn.search(ip):
+                judge += "河南VPN "
+            elif national_vpn.search(ip):
+                judge += "集团VPN "
+            else:
                 illegalvpn = 1
     if d["VPN"]:
         # judge += d["VPN"] 
         for ip in d["VPN"]:
-            if not vpn.search(ip):
+            if henan_vpn.search(ip):
+                judge += "河南VPN "
+            elif national_vpn.search(ip):
+                judge += "集团VPN "
+            else:
                 illegalvpn = 1
 
     if illegalvpn:
-        judge += "非法VPN"
+        judge += "非法VPN "
 
     if judge == "":
         judge += "正常"

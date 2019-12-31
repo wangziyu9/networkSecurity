@@ -12,7 +12,7 @@ db = client.TERMINAL
 collection_terminal = db.terminal
 collection_users = db.users
 
-file_name = r"/home/yur/code/networkSecurity/db/报表12292.csv"
+file_name = r"/home/yur/code/networkSecurity/db/报表1231.csv"
 with open(file_name, "a", encoding="utf8") as sf:
     # 写入 csv 首行
     s = ", "
@@ -35,7 +35,8 @@ ip = re.compile(r"IP:((\d+.){3}(\d+))")
 netcard = re.compile(r"] (.+) IP:")
 
 # result_target = db.target.find({"uname":"15639107968"},no_cursor_timeout=True)
-# result_target = db.target.find({"uname":{'$regex':}).skip(29000) ##.limit(50)#
+# result_targe
+# t = db.target.find({"uname":{'$regex':}).skip(29000) ##.limit(50)#
 # result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
 result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
 # 未采集到 iplocal

@@ -5,3 +5,4 @@
 *.xlsx
 *.pyc
 /__pycache__
+/csv-to-html-table

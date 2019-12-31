@@ -40,33 +40,33 @@ with open(file_name, "a", encoding="utf8") as sf:
         if doc['sizeOfip_local'] == 1:
             if doc['ip_local'][0] == '' or doc['ip_local'][0] == 'undefined':
                 d[doc['system']] += 1
-            elif doc['ip_server'] not in doc['ip_local'][0]:
-                judgestr = judgesingle.judge(doc['ip_server'], doc['ip_local'][0])
-                if judgestr == "":
-                    continue
-                user_info = db.users.find({"uname":doc["uname"]},no_cursor_timeout=True)
-                try:
-                    doc["user_info"] = user_info[0]
-                except:
-                    doc["user_info"] = {'_id': 'USER NOT FOUND', 'uname': 'USER NOT FOUND', 'name': 'USER NOT FOUND', 'mail': 'USER NOT FOUND', 'department': 'USER NOT FOUND', 'city': 'USER NOT FOUND'}
-                user_info.close()
+#             elif doc['ip_server'] not in doc['ip_local'][0]:
+#                 judgestr = judgesingle.judge(doc['ip_server'], doc['ip_local'][0])
+#                 if judgestr == "":
+#                     continue
+#                 user_info = db.users.find({"uname":doc["uname"]},no_cursor_timeout=True)
+#                 try:
+#                     doc["user_info"] = user_info[0]
+#                 except:
+#                     doc["user_info"] = {'_id': 'USER NOT FOUND', 'uname': 'USER NOT FOUND', 'name': 'USER NOT FOUND', 'mail': 'USER NOT FOUND', 'department': 'USER NOT FOUND', 'city': 'USER NOT FOUND'}
+#                 user_info.close()
 
-                linelist = [
-                    doc["uname"],
-                    doc["user_info"]["city"],
-                    doc["user_info"]["name"],
-                    doc["user_info"]["department"],
-                    doc["system"],
-                    doc["ip_server"],
-                    "1",
-                    # str(doc["ip_count"]),
-                    str(doc['ip_local']),
-                    judgestr
-                ]
-                linestr = ",".join(linelist)
-                sf.write(linestr + "\n")
+#                 linelist = [
+#                     doc["uname"],
+#                     doc["user_info"]["city"],
+#                     doc["user_info"]["name"],
+#                     doc["user_info"]["department"],
+#                     doc["system"],
+#                     doc["ip_server"],
+#                     "1",
+#                     # str(doc["ip_count"]),
+#                     str(doc['ip_local']),
+#                     judgestr
+#                 ]
+#                 linestr = ",".join(linelist)
+#                 sf.write(linestr + "\n")
                 
-df = read_csv(file_name)
-newDF = df.drop_duplicates()
-newDF.to_csv(file_name)
+# df = read_csv(file_name)
+# newDF = df.drop_duplicates()
+# newDF.to_csv(file_name)
 print(d)
