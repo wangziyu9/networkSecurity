@@ -11,9 +11,8 @@ client = pymongo.MongoClient(host='localhost', port=27017)
 db = client.TERMINAL
 collection_terminal = db.terminal
 collection_users = db.users
-collection_judge = db.judge
 
-file_name = r"/home/yur/code/networkSecurity/db/报表0107.csv"
+file_name = r"/home/yur/code/networkSecurity/db/报表1231.csv"
 with open(file_name, "a", encoding="utf8") as sf:
     # 写入 csv 首行
     s = ", "
@@ -39,7 +38,7 @@ netcard = re.compile(r"] (.+) IP:")
 # result_targe
 # t = db.target.find({"uname":{'$regex':}).skip(29000) ##.limit(50)#
 # result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
-result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.limit(50)#
+result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
 # 未采集到 iplocal
 
 # 遍历多 ip 终端，为终端网卡类型打标
@@ -86,7 +85,7 @@ for doc in result_target:
     adapter_ips = " ".join(ipl)
     # print(adapter_ips)
     # 调用判断是否违规
-    judgelst = judge.judge(doc["adapter_ip"])
+    judgestr = judge.judge(doc["adapter_ip"])
 
     linelist = [
         doc["uname"],
@@ -97,26 +96,14 @@ for doc in result_target:
         doc["ip_server"],
         str(doc["ip_count"]),
         adapter_ips,
-        str(judgelst)
+        judgestr
     ]
 
-    d = {
-        "uname":doc["uname"], 
-        "city":doc["user_info"]["city"], 
-        "name":doc["user_info"]["name"], 
-        "department":doc["user_info"]["department"],
-        "system":doc["system"],
-        "ip_server":doc["ip_server"], 
-        "ip_count":str(doc["ip_count"]), 
-        "adapter_ip":adapter_ips,
-        "judge":judgelst    
-    }
-    collection_judge.insert_one(d)
-    # linestr = s.join(linelist)
-    # with open(file_name, "a", encoding="utf8") as sf:
-    #     sf.write(linestr + "\n")
+    linestr = s.join(linelist)
+    with open(file_name, "a", encoding="utf8") as sf:
+        sf.write(linestr + "\n")
 
-# result_target.close()
-# df = read_csv(file_name)
-# newDF = df.drop_duplicates()
-# newDF.to_csv(file_name)
+result_target.close()
+df = read_csv(file_name)
+newDF = df.drop_duplicates()
+newDF.to_csv(file_name)

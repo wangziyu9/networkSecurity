@@ -13,7 +13,7 @@ vpn = re.compile(r"^(10.((0)|(25[1,3])|(56)).)|(133.160.)")
 
 
 def judge(d):
-    judge = ""
+    judge = []
 
     # 网络类型判断
     totalzone = 0
@@ -39,45 +39,44 @@ def judge(d):
     for value in zone.values():
         totalzone += value
 
-    if totalzone > 1:
+    if totalzone >= 1:
         for key, value in zone.items():
             if zone[key]:
-                judge += key
-                judge += " "
+                judge.append(key)
 
         if totalzone == 2:
-            judge += "双网卡 "
+            judge.append("双网卡")
         if totalzone > 2:
-            judge += "多网卡 "
+            judge.append("多网卡")
 
     # VPN 类型判断
     illegalvpn = 0
     if d["unknownVPN"]:
-        # judge += d["VPN"] 
+        # judge.append(d["VPN"] )
         for ip in d["unknownVPN"]:
             if henan_vpn.search(ip):
-                judge += "河南VPN "
+                judge.append("河南VPN")
             elif national_vpn.search(ip):
-                judge += "集团VPN "
+                judge.append("集团VPN")
             else:
                 illegalvpn = 1
     if d["VPN"]:
-        # judge += d["VPN"] 
+        # judge.append(d["VPN"] )
         for ip in d["VPN"]:
             if henan_vpn.search(ip):
-                judge += "河南VPN "
+                judge.append("河南VPN")
             elif national_vpn.search(ip):
-                judge += "集团VPN "
+                judge.append("集团VPN")
             else:
                 illegalvpn = 1
 
     if illegalvpn:
-        judge += "非法VPN "
+        judge.append("非法VPN")
 
     if judge == "":
-        judge += "正常"
+        judge.append("正常")
 
     return(judge)
 
-# d = {'Ethernet': [], 'Others': [], 'Wireless+External': [], 'unknownVPN': ['133.160.1.1'], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': ['10.251.1.84'], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': ['192.168.0.102'], 'Wireless+Onboard': []}
+# d = {'Ethernet': ['133.169.12.13'], 'Others': [], 'Wireless+External': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': [], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': [], 'Wireless+Onboard': []}
 # print(judge(d))
