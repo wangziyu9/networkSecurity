@@ -10,8 +10,7 @@ personal = re.compile(r"^(\d+.){3}(\d+)")
 
 vpn = re.compile(r"^(10.((0)|(25[1,3])|(56)).)|(133.160.)")
 # 10.0 10.56 10.251/3 133.160
-
-
+normal = ["BSS","MSS","集团VPN","河南VPN"]
 def judge(d):
     judge = []
 
@@ -73,10 +72,10 @@ def judge(d):
     if illegalvpn:
         judge.append("非法VPN")
 
-    if judge == "":
+    if len(judge) == 1 and judge[0] in normal:
         judge.append("正常")
 
     return(judge)
 
-# d = {'Ethernet': ['133.169.12.13'], 'Others': [], 'Wireless+External': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': [], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': [], 'Wireless+Onboard': []}
-# print(judge(d))
+d = {'Ethernet': ['133.169.12.13'], 'Others': [], 'Wireless+External': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': ['10.59.253.22'], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': [], 'Wireless+Onboard': []}
+print(judge(d))

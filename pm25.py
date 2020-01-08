@@ -53,7 +53,25 @@ def rtn_data_now():
 
 @app.route('/data/henan_aqirank', methods=['GET', 'POST'])
 def rtn_data_aqirank_henan():
-    l = db.get_data.get_henan_aqi_rank()
+    # l = {"开封": 1185, "三门峡": 905, "许昌": 1184, "焦作": 1079, "鹤壁": 834, "商丘": 621, "南阳": 1292, "濮阳": 834, "平顶山": 1246, "周口": 1544, "洛阳": 2278, "驻马店": 1443, "信阳": 1503, "新乡": 4344, "安阳": 850, "漯河": 522, "济源": 200, "郑州": 4659}
+    l = [{"name":"开封市","value": 1185},
+        {"name":"三门峡市","value": 905},
+        {"name":"许昌市","value": 1184},
+        {"name":"焦作市","value": 1079},
+        {"name":"鹤壁市","value": 834},
+        {"name":"商丘市","value": 621},
+        {"name":"南阳市","value": 1292},
+        {"name":"濮阳市","value": 834},
+        {"name":"平顶山市","value": 1246},
+        {"name":"周口市","value": 1544},
+        {"name":"洛阳市","value": 2278},
+        {"name":"驻马店市","value": 1443},
+        {"name":"信阳市","value": 1503},
+        {"name":"新乡市","value": 4344},
+        {"name":"安阳市","value": 850},
+        {"name":"漯河市","value": 522},
+        {"name":"济源市","value": 0},
+        {"name":"郑州市","value": 4659}]
     return jsonify(l)
 
 @app.route('/data/china_aqirank_top', methods=['GET', 'POST'])

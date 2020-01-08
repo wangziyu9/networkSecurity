@@ -39,7 +39,7 @@ netcard = re.compile(r"] (.+) IP:")
 # result_targe
 # t = db.target.find({"uname":{'$regex':}).skip(29000) ##.limit(50)#
 # result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
-result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.limit(50)#
+result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True).limit(300)#
 # 未采集到 iplocal
 
 # 遍历多 ip 终端，为终端网卡类型打标
