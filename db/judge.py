@@ -43,10 +43,10 @@ def judge(d):
             if zone[key]:
                 judge.append(key)
 
-        if totalzone == 2:
-            judge.append("双网卡")
-        if totalzone > 2:
+        if totalzone >= 2:
             judge.append("多网卡")
+        # if totalzone > 2:
+        #     judge.append("多网卡")
 
     # VPN 类型判断
     illegalvpn = 0
@@ -75,7 +75,10 @@ def judge(d):
     if len(judge) == 1 and judge[0] in normal:
         judge.append("正常")
 
+    if "MSS" in judge and "BSS" in judge:
+        judge.append("跨域")
+
     return(judge)
 
-d = {'Ethernet': ['133.169.12.13'], 'Others': [], 'Wireless+External': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': ['10.59.253.22'], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': [], 'Wireless+Onboard': []}
-print(judge(d))
+# d = {'Ethernet': ['133.169.12.13'], 'Others': [], 'Wireless+External': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'Wireless': [], 'VPN': ['10.59.253.22'], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': [], 'Wireless+Onboard': []}
+# print(judge(d))
