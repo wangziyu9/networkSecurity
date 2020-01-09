@@ -39,7 +39,7 @@ netcard = re.compile(r"] (.+) IP:")
 # result_targe
 # t = db.target.find({"uname":{'$regex':}).skip(29000) ##.limit(50)#
 # result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.skip(29000) ##.limit(50)#
-result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True).limit(300)#
+result_target = db.target.find({"sizeOfip_local":{'$gte':2}},no_cursor_timeout=True)#.limit(300)#
 # 未采集到 iplocal
 
 # 遍历多 ip 终端，为终端网卡类型打标
@@ -88,17 +88,17 @@ for doc in result_target:
     # 调用判断是否违规
     judgelst = judge.judge(doc["adapter_ip"])
 
-    linelist = [
-        doc["uname"],
-        doc["user_info"]["city"],
-        doc["user_info"]["name"],
-        doc["user_info"]["department"],
-        doc["system"],
-        doc["ip_server"],
-        str(doc["ip_count"]),
-        adapter_ips,
-        str(judgelst)
-    ]
+    # linelist = [
+    #     doc["uname"],
+    #     doc["user_info"]["city"],
+    #     doc["user_info"]["name"],
+    #     doc["user_info"]["department"],
+    #     doc["system"],
+    #     doc["ip_server"],
+    #     str(doc["ip_count"]),
+    #     adapter_ips,
+    #     str(judgelst)
+    # ]
 
     d = {
         "uname":doc["uname"], 

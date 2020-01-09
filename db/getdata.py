@@ -21,24 +21,29 @@ for r in result:
     # print(r)
 print(d)
 
-def get_all_judge():
-    for j in judge_list:
-        result = collection_judge.find({"judge":{"$all":[j]}}).count()
-        print(result)
+# def get_all_judge():
+#     for j in judge_list:
+#         result = collection_judge.find({"judge":{"$all":[j]}}).count()
+#         print(result)
 
-def get_city_judge(city):
-    d_city_judge = {}
-    value = {}
-    for j in judge_list:
-        result = collection_judge.count_documents({"city":city,"judge":{"$all":[j]}})
-        # d_city_judge["value"] = result
-        value[j] = result
+def get_city_judge():
+    d = {}
+    for city in city_list:
+        d_city_judge = {}
+        detail = {}
+        value = collection_judge.count_documents({"city":city})
 
-    d_city_judge["name"] = city
-    d_city_judge["value"] = value
+        for j in judge_list:
+            detail_result = collection_judge.count_documents({"city":city,"judge":{"$all":[j]}})
+            # d_city_judge["value"] = result
+            detail[j] = detail_result
 
-    print(d_city_judge)
+        d_city_judge["value"] = value
+        d_city_judge["detail"] = detail
+        d[city] = d_city_judge
+
+    print(d)
 
 if __name__ == "__main__":
-    for c in city_list:
-        get_city_judge(c)
+    
+    get_city_judge()

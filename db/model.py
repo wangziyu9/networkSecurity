@@ -1,5 +1,5 @@
-adapter_type = {'Ethernet':[], 'Others':[], 'Wireless+External':[],  'unknownVPN':[], 'External':[], 'Onboard':[],  'Wireless':[], 'VPN':[], 'VirtualAdapter':[], 'Ethernet+External':[], 'Ethernet+Onboard':[], 'Wireless+Onboard':[]}
-judge_type = {'Ethernet':[], 'Others':[], 'Wireless+External':[],  'unknownVPN':[], 'External':[], 'Onboard':[],  'Wireless':[], 'VPN':[], 'VirtualAdapter':[], 'Ethernet+External':[], 'Ethernet+Onboard':[], 'Wireless+Onboard':[]}
+adapter_type = {'Ethernet':[], 'Others':[], 'Wireless+External':[],  'unknownVPN':[], 'External':[], 'Onboard':[],  'Wireless':[], 'VPN':[], 'VirtualAdapter':[], 'Ethernet+External':[], 'Ethernet+Onboard':[], 'Wireless+Onboard':[],"unknownadapter":[]}
+judge_type = {'Ethernet':[], 'Others':[], 'Wireless+External':[],  'unknownVPN':[], 'External':[], 'Onboard':[],  'Wireless':[], 'VPN':[], 'VirtualAdapter':[], 'Ethernet+External':[], 'Ethernet+Onboard':[], 'Wireless+Onboard':[],"unknownadapter":[]}
 
 d = {"Intel(R) Ethernet Connection I217-LM Network Adapter":"Ethernet+Onboard",
 "Intel(R) Centrino(R) Wireless-N 1000 Network Adapter":"Wireless+Onboard",
@@ -361,7 +361,7 @@ def march_device(s):
     try:
         return(d[s])
     except:
-        return("unknown adapter")
+        return("unknownadapter")
 
 # tt = {'Ethernet': ['10.57.116.201'], 'Others': [], 'Wireless+External': ['172.30.235.1'], 'VirtualAdapter': [], 'unknownVPN': [], 'External': [], 'Onboard': [], 'VirtualAdapter': [], 'Wireless': [], 'VPN': [], 'VirtualAdapter': [], 'Ethernet+External': [], 'Ethernet+Onboard': ['133.163.20.101', '10.57.116.201'], 'Wireless+Onboard': []}
 # ipl = []
