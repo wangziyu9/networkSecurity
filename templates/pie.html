@@ -116,7 +116,7 @@
         for (var i = 0; i < data.length; i++) {
             // var randomValue = Math.round(Math.random() * 30);
             // var radius = randomValue <= 10 ? 10 : randomValue;
-            var radius = jsn_data[data[i].name]["value"]/200;
+            var radius = 15;//jsn_data[data[i].name]["value"]/200;
             var geoCoord = geoCoordMap[data[i].name];
             if (geoCoord) {
                 var vr = [];
@@ -185,7 +185,7 @@
             seriesIndex: 0,
             text: ["高", "低"],
             calculable: true,
-            color: ['#c05050', '#e5cf0d', '#5ab1ef'],
+            color: ['#c05050', '#c5cf0d', '#5ab1ef'],
         },
         series: [{
             name: '总量',
