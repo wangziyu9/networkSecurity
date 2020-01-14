@@ -66,7 +66,7 @@
                 <ul class="nav nav-sidebar">
                     
                     <li class="active"><a href="#">总览 <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">详情</a></li>
+                    <li><a href="/dashboard">详情</a></li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -89,6 +89,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
     <script type="text/javascript">// 基于准备好的dom，初始化echarts实例
+    $.post("/data/overview", function (jsn_data, status) {
         var myChart = echarts.init(document.getElementById('main'));
     
         var yearArr = ["跨域", "风险终端总量", "非法VPN"];
@@ -100,7 +101,7 @@
         var geoCoordMap = {};
     
         var mapFeatures = echarts.getMap('河南').geoJson.features;
-        var jsn_data = {'开封市': {'value': 2212, 'detail': {'正常': 1191, '跨域': 596, '多网卡': 739, '非法VPN': 10}}, '三门峡市': {'value': 1612, 'detail': {'正常': 1506, '跨域': 0, '多网卡': 66, '非法VPN': 0}}, '许昌市': {'value': 2163, 'detail': {'正常': 2058, '跨域': 0, '多网卡': 83, '非法VPN': 5}}, '焦作市': {'value': 1888, 'detail': {'正常': 994, '跨域': 529, '多网卡': 818, '非法VPN': 0}}, '鹤壁市': {'value': 1557, 'detail': {'正常': 977, '跨域': 477, '多网卡': 578, '非法VPN': 0}}, '商丘市': {'value': 1225, 'detail': {'正常': 1060, '跨域': 10, '多网卡': 160, '非法VPN': 0}}, '南阳市': {'value': 2537, 'detail': {'正常': 1728, '跨域': 476, '多网卡': 684, '非法VPN': 72}}, '濮阳市': {'value': 1673, 'detail': {'正常': 857, '跨域': 513, '多网卡': 797, '非法VPN': 1}}, '平顶山市': {'value': 2309, 'detail': {'正常': 1292, '跨域': 698, '多网卡': 961, '非法VPN': 36}}, '周口市': {'value': 2684, 'detail': {'正常': 1444, '跨域': 879, '多网卡': 1163, '非法VPN': 0}}, '洛阳市': {'value': 4344, 'detail': {'正常': 3491, '跨域': 403, '多网卡': 640, '非法VPN': 20}}, '驻马店市': {'value': 2820, 'detail': {'正常': 2389, '跨域': 235, '多网卡': 307, '非法VPN': 69}}, '信阳市': {'value': 2999, 'detail': {'正常': 874, '跨域': 654, '多网卡': 1682, '非法VPN': 348}}, '新乡市': {'value': 7801, 'detail': {'正常': 3591, '跨域': 3076, '多网卡': 4017, '非法VPN': 85}}, '安阳市': {'value': 1595, 'detail': {'正常': 1527, '跨域': 0, '多网卡': 53, '非法VPN': 0}}, '漯河市': {'value': 927, 'detail': {'正常': 866, '跨域': 1, '多网卡': 60, '非法VPN': 0}}, '济源市': {'value': 433, 'detail': {'正常': 423, '跨域': 0, '多网卡': 3, '非法VPN': 0}}, '郑州市': {'value': 8951, 'detail': {'正常': 3155, '跨域': 3405, '多网卡': 5727, '非法VPN': 12}}, '河南市': {'value': 3991, 'detail': {'正常': 117, '跨域': 3, '多网卡': 1928, '非法VPN': 162}}}
+        // var jsn_data = {'开封市': {'value': 2212, 'detail': {'正常': 1191, '跨域': 596, '多网卡': 739, '非法VPN': 10}}, '三门峡市': {'value': 1612, 'detail': {'正常': 1506, '跨域': 0, '多网卡': 66, '非法VPN': 0}}, '许昌市': {'value': 2163, 'detail': {'正常': 2058, '跨域': 0, '多网卡': 83, '非法VPN': 5}}, '焦作市': {'value': 1888, 'detail': {'正常': 994, '跨域': 529, '多网卡': 818, '非法VPN': 0}}, '鹤壁市': {'value': 1557, 'detail': {'正常': 977, '跨域': 477, '多网卡': 578, '非法VPN': 0}}, '商丘市': {'value': 1225, 'detail': {'正常': 1060, '跨域': 10, '多网卡': 160, '非法VPN': 0}}, '南阳市': {'value': 2537, 'detail': {'正常': 1728, '跨域': 476, '多网卡': 684, '非法VPN': 72}}, '濮阳市': {'value': 1673, 'detail': {'正常': 857, '跨域': 513, '多网卡': 797, '非法VPN': 1}}, '平顶山市': {'value': 2309, 'detail': {'正常': 1292, '跨域': 698, '多网卡': 961, '非法VPN': 36}}, '周口市': {'value': 2684, 'detail': {'正常': 1444, '跨域': 879, '多网卡': 1163, '非法VPN': 0}}, '洛阳市': {'value': 4344, 'detail': {'正常': 3491, '跨域': 403, '多网卡': 640, '非法VPN': 20}}, '驻马店市': {'value': 2820, 'detail': {'正常': 2389, '跨域': 235, '多网卡': 307, '非法VPN': 69}}, '信阳市': {'value': 2999, 'detail': {'正常': 874, '跨域': 654, '多网卡': 1682, '非法VPN': 348}}, '新乡市': {'value': 7801, 'detail': {'正常': 3591, '跨域': 3076, '多网卡': 4017, '非法VPN': 85}}, '安阳市': {'value': 1595, 'detail': {'正常': 1527, '跨域': 0, '多网卡': 53, '非法VPN': 0}}, '漯河市': {'value': 927, 'detail': {'正常': 866, '跨域': 1, '多网卡': 60, '非法VPN': 0}}, '济源市': {'value': 433, 'detail': {'正常': 423, '跨域': 0, '多网卡': 3, '非法VPN': 0}}, '郑州市': {'value': 8951, 'detail': {'正常': 3155, '跨域': 3405, '多网卡': 5727, '非法VPN': 12}}, '河南市': {'value': 3991, 'detail': {'正常': 117, '跨域': 3, '多网卡': 1928, '非法VPN': 162}}}
     
         mapFeatures.forEach(function (v) {
             // 地区名称
@@ -169,7 +170,7 @@
                     var p = myChart.convertToPixel({ seriesIndex: 0 }, geoCoord);
                     v.center = p;
                     if (params != 0 && params.zoom) {
-                        v.radius = 15;// v.radius * params.zoom;
+                        v.radius = v.radius * params.zoom;
                     }
                     if (params != 0 && params.selected) {
                         var rangeFirstNumber = params.selected[0];
@@ -192,7 +193,7 @@
             for (var i = 0; i < data.length; i++) {
                 // var randomValue = Math.round(Math.random() * 30);
                 // var radius = randomValue <= 10 ? 10 : randomValue;
-                var radius = jsn_data[data[i].name]["value"]/200;
+                var radius = 15;//jsn_data[data[i].name]["value"]/200;
                 var geoCoord = geoCoordMap[data[i].name];
                 if (geoCoord) {
                     var vr = [];
@@ -212,6 +213,7 @@
                             radius: radius,
                             center: p,
                             data: vr,
+                            color:['red', 'yellow', 'orange'],
                             zlevel: 4,
                             label: {
                                 normal: {
@@ -261,7 +263,7 @@
                 seriesIndex: 0,
                 text: ["高", "低"],
                 calculable: true,
-                color: ['#c05050', '#e5cf0d', '#5ab1ef'],
+                color: ['#000079', '#2894FF', '#D2E9FF'],
             },
             series: [{
                 name: '总量',
@@ -294,8 +296,7 @@
         console.log("===========option=================");
         console.log(option);
         myChart.setOption(option, true);
+    });
     </script>
 </body>
-
-
 </html>

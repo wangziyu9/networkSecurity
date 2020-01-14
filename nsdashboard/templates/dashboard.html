@@ -64,7 +64,7 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li><a href="#">总览</a></li>
+                    <li><a href="/overview">总览</a></li>
                     <li class="active"><a href="#">详情 <span class="sr-only">(current)</span></a></li>
                 </ul>
             </div>
@@ -78,7 +78,7 @@
                 </div>
 
                 <h2 class="sub-header">Section title</h2>
-                <div id="weibo_table">
+                <div id="dashboard_table">
                     <!-- <div class="col-md-6"> -->
                     <div class="table table-striped">
                         <table class="table">
@@ -122,6 +122,13 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
     <script type="text/javascript">
+        var detial_data = [{ "city": "开封", "value": 2212, "正常": 1191, "跨域": 596, "多网卡": 739, "非法VPN": 10, "url": "#balabala" }, { "city": "三门峡", "value": 1612, "正常": 1506, "跨域": 0, "多网卡": 66, "非法VPN": 0, "url": "#balabala" }, { "city": "许昌", "value": 2163, "正常": 2058, "跨域": 0, "多网卡": 83, "非法VPN": 5, "url": "#balabala" }, { "city": "焦作", "value": 1888, "正常": 994, "跨域": 529, "多网卡": 818, "非法VPN": 0, "url": "#balabala" }, { "city": "鹤壁", "value": 1557, "正常": 977, "跨域": 477, "多网卡": 578, "非法VPN": 0, "url": "#balabala" }, { "city": "商丘", "value": 1225, "正常": 1060, "跨域": 10, "多网卡": 160, "非法VPN": 0, "url": "#balabala" }, { "city": "南阳", "value": 2537, "正常": 1728, "跨域": 476, "多网卡": 684, "非法VPN": 72, "url": "#balabala" }, { "city": "濮阳", "value": 1673, "正常": 857, "跨域": 513, "多网卡": 797, "非法VPN": 1, "url": "#balabala" }, { "city": "平顶山", "value": 2309, "正常": 1292, "跨域": 698, "多网卡": 961, "非法VPN": 36, "url": "#balabala" }, { "city": "周口", "value": 2684, "正常": 1444, "跨域": 879, "多网卡": 1163, "非法VPN": 0, "url": "#balabala" }, { "city": "洛阳", "value": 4344, "正常": 3491, "跨域": 403, "多网卡": 640, "非法VPN": 20, "url": "#balabala" }, { "city": "驻马店", "value": 2820, "正常": 2389, "跨域": 235, "多网卡": 307, "非法VPN": 69, "url": "#balabala" }, { "city": "信阳", "value": 2999, "正常": 874, "跨域": 654, "多网卡": 1682, "非法VPN": 348, "url": "#balabala" }, { "city": "新乡", "value": 7801, "正常": 3591, "跨域": 3076, "多网卡": 4017, "非法VPN": 85, "url": "#balabala" }, { "city": "安阳", "value": 1595, "正常": 1527, "跨域": 0, "多网卡": 53, "非法VPN": 0, "url": "#balabala" }, { "city": "漯河", "value": 927, "正常": 866, "跨域": 1, "多网卡": 60, "非法VPN": 0, "url": "#balabala" }, { "city": "济源", "value": 433, "正常": 423, "跨域": 0, "多网卡": 3, "非法VPN": 0, "url": "#balabala" }, { "city": "郑州", "value": 8951, "正常": 3155, "跨域": 3405, "多网卡": 5727, "非法VPN": 12, "url": "#balabala" }, { "city": "河南", "value": 3991, "正常": 117, "跨域": 3, "多网卡": 1928, "非法VPN": 162 }]
+        var jsn_data = {
+        "cities": ['郑州', '开封', '洛阳', '平顶山', '安阳', '鹤壁', '新乡', '焦作', '濮阳', '许昌', '漯河', '三门峡', '南阳', '商丘', '信阳', '周口', '驻马店', '济源'],
+        '跨域' : [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 234, 290, 330, 310],
+        '多网卡' : [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 234, 290, 330, 310],
+        '非法VPN': [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 234, 290, 330, 310]
+        }
         $(document).ready(
             function () {
                 var app = {};
@@ -130,8 +137,8 @@
                     props: ['todo'],
                     template: '<tbody>{{ todo.text }}</tbody>'
                 })
-                var weibo_table = new Vue({
-                    el: '#weibo_table',
+                var dashboard_table = new Vue({
+                    el: '#dashboard_table',
                     data: {
                         rows: [
                             { id: 0, text: '正在加载', sentiment: 0.23 },
@@ -141,26 +148,7 @@
                     }
                 })
 
-                data = {
-                    "word_cloud": [
-                        { name: "生活资源", value: "999" },
-                        { name: "生活资源", value: "999" },
-                        { name: "生活资源", value: "999" },
-                        { name: "供热管理", value: "888" },
-                        { name: "供热管理", value: "888" },
-                        { name: "供热管理", value: "888" },
-                        { name: "供热管理", value: "888" },
-                        { name: "供气质量", value: "777" }
-                    ],
-                    "sem_chart": {
-                        "positive": 80,
-                        "negative": 20,
-                        "objective": 100
-                    },
-                    "weibo_content": [{ "city": "开封", "value": 2212, "正常": 1191, "跨域": 596, "多网卡": 739, "非法VPN": 10, "url": "#balabala" }, { "city": "三门峡", "value": 1612, "正常": 1506, "跨域": 0, "多网卡": 66, "非法VPN": 0, "url": "#balabala" }, { "city": "许昌", "value": 2163, "正常": 2058, "跨域": 0, "多网卡": 83, "非法VPN": 5, "url": "#balabala" }, { "city": "焦作", "value": 1888, "正常": 994, "跨域": 529, "多网卡": 818, "非法VPN": 0, "url": "#balabala" }, { "city": "鹤壁", "value": 1557, "正常": 977, "跨域": 477, "多网卡": 578, "非法VPN": 0, "url": "#balabala" }, { "city": "商丘", "value": 1225, "正常": 1060, "跨域": 10, "多网卡": 160, "非法VPN": 0, "url": "#balabala" }, { "city": "南阳", "value": 2537, "正常": 1728, "跨域": 476, "多网卡": 684, "非法VPN": 72, "url": "#balabala" }, { "city": "濮阳", "value": 1673, "正常": 857, "跨域": 513, "多网卡": 797, "非法VPN": 1, "url": "#balabala" }, { "city": "平顶山", "value": 2309, "正常": 1292, "跨域": 698, "多网卡": 961, "非法VPN": 36, "url": "#balabala" }, { "city": "周口", "value": 2684, "正常": 1444, "跨域": 879, "多网卡": 1163, "非法VPN": 0, "url": "#balabala" }, { "city": "洛阳", "value": 4344, "正常": 3491, "跨域": 403, "多网卡": 640, "非法VPN": 20, "url": "#balabala" }, { "city": "驻马店", "value": 2820, "正常": 2389, "跨域": 235, "多网卡": 307, "非法VPN": 69, "url": "#balabala" }, { "city": "信阳", "value": 2999, "正常": 874, "跨域": 654, "多网卡": 1682, "非法VPN": 348, "url": "#balabala" }, { "city": "新乡", "value": 7801, "正常": 3591, "跨域": 3076, "多网卡": 4017, "非法VPN": 85, "url": "#balabala" }, { "city": "安阳", "value": 1595, "正常": 1527, "跨域": 0, "多网卡": 53, "非法VPN": 0, "url": "#balabala" }, { "city": "漯河", "value": 927, "正常": 866, "跨域": 1, "多网卡": 60, "非法VPN": 0, "url": "#balabala" }, { "city": "济源", "value": 433, "正常": 423, "跨域": 0, "多网卡": 3, "非法VPN": 0, "url": "#balabala" }, { "city": "郑州", "value": 8951, "正常": 3155, "跨域": 3405, "多网卡": 5727, "非法VPN": 12, "url": "#balabala" }, { "city": "河南", "value": 3991, "正常": 117, "跨域": 3, "多网卡": 1928, "非法VPN": 162 }]
-                }
-
-                weibo_table._data.rows = data.weibo_content;
+                dashboard_table._data.rows = detial_data;
                 console.log(data.word_cloud)
             })
 
@@ -168,7 +156,6 @@
 
         // 指定图表的配置项和数据
         const option = {
-
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -178,7 +165,7 @@
                 }
             },
             legend: {
-                data: ['正常', '双网卡', '非法VPN']
+                data: ['跨域', '多网卡', '非法VPN']
             },
             grid: {
                 left: '2%',
@@ -191,11 +178,12 @@
             },
             xAxis: {
                 type: 'category',
+                // data:convertData(data).xAxis
                 data: ['郑州', '开封', '洛阳', '平顶山', '安阳', '鹤壁', '新乡', '焦作', '濮阳', '许昌', '漯河', '三门峡', '南阳', '商丘', '信阳', '周口', '驻马店', '济源']
             },
             series: [
                 {
-                    name: '正常',
+                    name: '跨域',
                     type: 'bar',
                     stack: '总量',
                     label: {
@@ -205,7 +193,7 @@
                     data: [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 234, 290, 330, 310]
                 },
                 {
-                    name: '双网卡',
+                    name: '多网卡',
                     type: 'bar',
                     stack: '总量',
                     label: {
