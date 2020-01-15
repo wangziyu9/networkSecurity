@@ -44,17 +44,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Project name</a>
+                <a class="navbar-brand" href="#">终端管控平台</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Dashboard</a></li>
+                    <!-- <li><a href="#">Dashboard</a></li>
                     <li><a href="#">Settings</a></li>
                     <li><a href="#">Profile</a></li>
-                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Help</a></li> -->
                 </ul>
                 <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search...">
+                    <!-- <input type="text" class="form-control" placeholder="Search..."> -->
                 </form>
             </div>
         </div>
@@ -70,7 +70,7 @@
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h1 class="page-header">Overview</h1>
+                <h1 class="page-header">河南省风险预警地图</h1>
 
                 <div id="main" style="width: 100%;height:800px;"></div>
 
@@ -119,21 +119,6 @@
                 ]
             })
         });
-        
-        // mapFeatures.forEach(function (v) {
-        //     // 地区名称
-        //     var name = v.properties.name;
-        //     // 地区经纬度
-        //     geoCoordMap[name] = v.properties.cp;
-        //     data.push({
-        //         "name": name,
-        //         "value": [
-        //             { name: "2013", value: Math.round(Math.random() * 100 + 10) },
-        //             { name: "2014", value: Math.round(Math.random() * 100 + 10) },
-        //             { name: "2015", value: Math.round(Math.random() * 100 + 10) }
-        //         ]
-        //     })
-        // });
     
         //var geoCoordMap = eval("({"+str+"})");
         console.log("===========geoCoordMap===============");
@@ -257,13 +242,13 @@
             },
             visualMap: {
                 min: 0,
-                max: 5000,
+                max: 500,
                 left: 'left',
                 top: 'bottom',
                 seriesIndex: 0,
                 text: ["高", "低"],
                 calculable: true,
-                color: ['#000079', '#2894FF', '#D2E9FF'],
+                color: ['#000079', '#0072E3', '#D2E9FF'],
             },
             series: [{
                 name: '总量',
