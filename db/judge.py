@@ -1,13 +1,15 @@
 import json
 import re
 
+bss_vpn = re.compile(r"133.160.32")
 henan_vpn = re.compile(r"10.59.253.22(8|9)")
-national_vpn = re.compile(r"^10.253")
+national_vpn = re.compile(r"10.253")
 oss = re.compile(r"^256.")
 mss = re.compile(r"^10.5[6|7]")
 bss = re.compile(r"^133.")
 personal = re.compile(r"^(\d+.){3}(\d+)")
 
+# 133.160.32
 vpn = re.compile(r"^(10.((0)|(25[1,3])|(56)).)|(133.160.)")
 # 10.0 10.56 10.251/3 133.160
 normal = ["BSS","MSS","集团VPN","河南VPN"]
@@ -55,8 +57,13 @@ def judge(d):
         for ip in d["unknownVPN"]:
             if henan_vpn.search(ip):
                 judge.append("河南VPN")
+                judge.append("MSS")
             elif national_vpn.search(ip):
                 judge.append("集团VPN")
+                judge.append("MSS")
+            elif bss_vpn.search(ip):
+                judge.append("B域VPN")
+                judge.append("BSS")
             else:
                 illegalvpn = 1
     if d["VPN"]:
@@ -64,8 +71,13 @@ def judge(d):
         for ip in d["VPN"]:
             if henan_vpn.search(ip):
                 judge.append("河南VPN")
+                judge.append("MSS")
             elif national_vpn.search(ip):
                 judge.append("集团VPN")
+                judge.append("MSS")
+            elif bss_vpn.search(ip):
+                judge.append("B域VPN")
+                judge.append("BSS")
             else:
                 illegalvpn = 1
 
