@@ -1,24 +1,6 @@
-# termmgr
-
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+脚本，每天凌晨遍历新生成的 json 文件，写入 mongodb 数据库。
+简单的登录页面。
+前端请求数据，地图可视化，图表，列表。
+地市违规人数、违规人数趋势、违规类型比例等。
+地市违规人数下级详细违规人员信息。
+整改情况中标注出已经整改，新增违规的用户。
