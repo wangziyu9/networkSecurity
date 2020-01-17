@@ -6,7 +6,7 @@
 *.xlsx
 *.pyc
 /__pycache__
-/csv-to-html-table
+/done/csv-to-html-table
 # =======
 # .DS_Store
 # node_modules
