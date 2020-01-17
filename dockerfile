@@ -10,3 +10,5 @@ EXPOSE  5000
 
 # CMD     /bin/bash python3 ~/code/nsdashboard/web.py
 ENTRYPOINT ["python","~/code/nsdashboard/web.py"]
+# [yur-manjaro networkSecurity]# docker run -p5000:5000 ns
+# 10.56.113.68   mssdev Hnltxxhb@2020
