@@ -1,3 +1,4 @@
+# 通过文件创建 docker 镜像
 FROM    jcdemo/flaskapp
 
 COPY    ./nsdashboard ~/code/nsdashboard/ 
