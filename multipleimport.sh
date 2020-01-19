@@ -6,6 +6,7 @@ tree -if /home/yur/Documents/upload | grep json$ |
 while read col;
 do
 	echo $col;
+	# /bin/cp 无提示直接覆盖现有文件
 	/bin/cp -rf $col col.bak;
 	if [ $(file -i $col | grep utf-8 | awk '{print length($0)}') ]
 	then 

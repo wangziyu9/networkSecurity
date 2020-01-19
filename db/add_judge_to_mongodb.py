@@ -1,11 +1,11 @@
-# 查终端记录数据库，标记网卡类型，查询终端用户表，将记录写入 csv
+# 查终端记录数据库，标记网卡类型，查询终端用户表，将记录写入数据库
 
 import model
 import pymongo
 import re
 import copy
 import judge
-from pandas import read_csv;
+# from pandas import read_csv;
 
 client = pymongo.MongoClient(host='localhost', port=27017)
 db = client.TERMINAL
