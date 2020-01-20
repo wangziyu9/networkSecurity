@@ -81,7 +81,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
     <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="../static/bootstrap.js"></script>
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
@@ -112,7 +112,6 @@
                 "name": name,
                 "value": [
                     { name: "跨域", value: jsn_data[name]["detail"]["跨域"] },
-    
                     { name: "非法VPN", value: jsn_data[name]["detail"]["非法VPN"] },
                     { name: "多网卡", value: jsn_data[name]["detail"]["多网卡"] },
                     // { name: "总数", value: 0 },
@@ -136,9 +135,10 @@
     
                 // v.value.forEach(function (v1) {
                 //     if (String(v1.name) === String(year)) {
-                        mapData.push({
-                            "name": v.name, "value": jsn_data[v.name]["value"]//v1.value
-                        })
+                var total = jsn_data[v.name]["detail"]["多网卡"] + jsn_data[v.name]["detail"]["非法VPN"];
+                mapData.push({
+                    "name": v.name, "value": total//jsn_data[v.name]["value"]//v1.value
+                })
                 //     }
                 // })
             });
@@ -242,7 +242,7 @@
             },
             visualMap: {
                 min: 0,
-                max: 500,
+                max: 300,
                 left: 'left',
                 top: 'bottom',
                 seriesIndex: 0,
